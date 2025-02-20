@@ -95,6 +95,21 @@ app.post('/write/adduser', async (req: UserRequest, res: Response) => {
   }
 });
 
+app.use('/read/username/:name', addMsgToRequest)
+app.get('/read/username/:name', (req: UserRequest, res: Response) => {
+  let userName = req.params.name;
+  let userEmail = req.users?.filter(function (user) {
+    return user.username === userName;
+  })
+  if (userEmail?.length === 0) {
+    res.send({ error: { message: `${userName} not found`, status: 404 } });
+  }
+  else {
+    res.send(userEmail);
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
